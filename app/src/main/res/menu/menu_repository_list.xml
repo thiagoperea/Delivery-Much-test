@@ -6,6 +6,6 @@
         android:id="@+id/dayNightMenu"
         android:icon="@drawable/ic_day_and_night"
         android:title="Day/Night"
-        app:iconTint="@color/white"
+        app:iconTint="?colorControlNormal"
         app:showAsAction="always" />
 </menu>
