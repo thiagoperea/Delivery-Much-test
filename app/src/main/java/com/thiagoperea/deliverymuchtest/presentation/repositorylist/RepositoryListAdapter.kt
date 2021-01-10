@@ -27,10 +27,12 @@ class RepositoryListAdapter(
 
     override fun getItemCount() = dataset.size
 
-    fun setData(repositories: List<Repository>) {
+    fun setData(repositories: List<Repository>?) {
         clearData()
-        dataset.addAll(repositories)
-        notifyDataSetChanged()
+        repositories?.let {
+            dataset.addAll(it)
+            notifyDataSetChanged()
+        }
     }
 
     fun clearData() = dataset.clear()
@@ -41,8 +43,11 @@ class RepositoryListAdapter(
     ) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(repository: Repository) {
-            itemView.findViewById<TextView>(R.id.repositoryItemTitle).text = repository.name
-            itemView.findViewById<TextView>(R.id.repositoryItemSubtitle).text = repository.author
+            itemView.findViewById<TextView>(R.id.repositoryItemTitle)
+                .text = repository.name
+
+            itemView.findViewById<TextView>(R.id.repositoryItemSubtitle)
+                .text = repository.author.username
 
             itemView.setOnClickListener { onRepositoryClick(repository) }
         }

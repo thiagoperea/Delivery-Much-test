@@ -1,16 +1,22 @@
 package com.thiagoperea.deliverymuchtest.presentation.repositorylist
 
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.thiagoperea.deliverymuchtest.R
 import com.thiagoperea.deliverymuchtest.data.model.Repository
@@ -43,7 +49,11 @@ class RepositoryListActivity : AppCompatActivity() {
     }
 
     private fun onRepositoryClick(repository: Repository) {
-        toast("Show deteails of: ${repository.name} from ${repository.author}")
+        MaterialAlertDialogBuilder(this)
+//            .setTitle("Detalhes do repositório")
+            .setView(RepositoryDetailsView(layoutInflater, repository).createView())
+            .setNeutralButton("Fechar", null)
+            .show()
     }
 
     private fun setupObservers() {
@@ -54,14 +64,23 @@ class RepositoryListActivity : AppCompatActivity() {
                 is RepositoryListState.Error -> onSearchError(it.errorMessage)
             }
         }
+
+        viewModel.isDayThemeState.observe(this) { isDayTheme ->
+            if (isDayTheme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        }
     }
 
-    private fun onSearchError(errorMessage: String) {
+    private fun onSearchError(errorMessage: String?) {
         hideLoading()
-        toast(errorMessage)
+        Log.e("TESTE_THIAGO", "onSearchError: $errorMessage")
+        Toast.makeText(this, "ERRO: $errorMessage", Toast.LENGTH_SHORT).show()
     }
 
-    private fun onSearchSuccess(repositories: List<Repository>) {
+    private fun onSearchSuccess(repositories: List<Repository>?) {
         hideLoading()
         adapter?.setData(repositories)
     }
@@ -101,14 +120,39 @@ class RepositoryListActivity : AppCompatActivity() {
     private fun setupToolbar() {
         findViewById<MaterialToolbar>(R.id.repositoryListToolbar)?.setOnMenuItemClickListener { menuItem ->
             if (menuItem.itemId == R.id.dayNightMenu) {
-                //TODO: ViewModel.switchDayNight
                 viewModel.switchDayNight()
-                toast("mudar tema")
             }
             return@setOnMenuItemClickListener true
         }
     }
 }
 
-fun AppCompatActivity.toast(message: String) =
-    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+class RepositoryDetailsView(
+    private val inflater: LayoutInflater,
+    private val repository: Repository
+) {
+
+
+    fun createView(): View {
+        val detailsView = inflater.inflate(R.layout.dialog_repository_details, null)
+
+        Glide.with(inflater.context)
+            .load(repository.author.avatarUrl)
+            .placeholder(R.drawable.ic_github)
+            .error(R.drawable.ic_launcher_foreground)
+            .fitCenter()
+            .into(detailsView.findViewById(R.id.dialogRepositoryImage))
+
+        detailsView.findViewById<TextView>(R.id.dialogRepositoryTitle)
+            .text = repository.name
+
+        detailsView.findViewById<TextView>(R.id.dialogRepositoryAuthor)
+            .text = repository.author.username
+
+        detailsView.findViewById<TextView>(R.id.dialogRepositoryDescription)
+            .text = repository.description
+
+        return detailsView
+    }
+
+}

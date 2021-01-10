@@ -1,6 +1,14 @@
 package com.thiagoperea.deliverymuchtest.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Repository(
     val name: String,
-    val author: String
+    @SerializedName("owner") val author: RepositoryAuthor,
+    val description: String
+)
+
+data class RepositoryAuthor(
+    @SerializedName("login") val username: String,
+    @SerializedName("avatar_url") val avatarUrl: String
 )
