@@ -10,8 +10,7 @@ class LocalGithubRepository : GithubRepository {
 
     override suspend fun doSearch(searchQuery: String): Response<List<Repository>> {
         delay(3000)
-
-        return if (Random.nextInt(1, 100) > 85) {
+        return if (Random.nextBoolean()) {
             Response(false, null, "Some mock exception!")
         } else {
             Response(

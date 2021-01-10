@@ -21,7 +21,6 @@ class RepositoryListViewModel(
     private val _isDayThemeState = MutableLiveData<Boolean>()
     val isDayThemeState: LiveData<Boolean> = _isDayThemeState
 
-
     fun doSearch(searchQuery: String) {
         viewModelScope.launch(Dispatchers.Main) {
             _searchState.postValue(RepositoryListState.Loading)
@@ -41,5 +40,9 @@ class RepositoryListViewModel(
     fun switchDayNight() {
         val isDayTheme = internalRepository.switchDayNightTheme()
         _isDayThemeState.postValue(isDayTheme)
+    }
+
+    fun clearErrorEmitter() {
+        _searchState.postValue(null)
     }
 }

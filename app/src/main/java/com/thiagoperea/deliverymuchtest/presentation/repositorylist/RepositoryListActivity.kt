@@ -1,10 +1,10 @@
 package com.thiagoperea.deliverymuchtest.presentation.repositorylist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -50,7 +50,6 @@ class RepositoryListActivity : AppCompatActivity() {
 
     private fun onRepositoryClick(repository: Repository) {
         MaterialAlertDialogBuilder(this)
-//            .setTitle("Detalhes do repositório")
             .setView(RepositoryDetailsView(layoutInflater, repository).createView())
             .setNeutralButton("Fechar", null)
             .show()
@@ -76,13 +75,17 @@ class RepositoryListActivity : AppCompatActivity() {
 
     private fun onSearchError(errorMessage: String?) {
         hideLoading()
-        Log.e("TESTE_THIAGO", "onSearchError: $errorMessage")
+        findViewById<ImageView>(R.id.repositoryListPlaceholder).visibility = View.VISIBLE
         Toast.makeText(this, "ERRO: $errorMessage", Toast.LENGTH_SHORT).show()
+        viewModel.clearErrorEmitter()
     }
 
     private fun onSearchSuccess(repositories: List<Repository>?) {
         hideLoading()
         adapter?.setData(repositories)
+        if (repositories?.isEmpty() == true) {
+            findViewById<ImageView>(R.id.repositoryListPlaceholder).visibility = View.VISIBLE
+        }
     }
 
     private fun onSearchLoading() {
@@ -93,11 +96,13 @@ class RepositoryListActivity : AppCompatActivity() {
     private fun showLoading() {
         findViewById<ProgressBar>(R.id.repositoryListLoading).visibility = View.VISIBLE
         findViewById<RecyclerView>(R.id.repositoryListView).visibility = View.GONE
+        findViewById<ImageView>(R.id.repositoryListPlaceholder).visibility = View.GONE
     }
 
     private fun hideLoading() {
         findViewById<ProgressBar>(R.id.repositoryListLoading).visibility = View.GONE
         findViewById<RecyclerView>(R.id.repositoryListView).visibility = View.VISIBLE
+        findViewById<ImageView>(R.id.repositoryListPlaceholder).visibility = View.GONE
     }
 
     private fun setupSearchBar() {
@@ -132,27 +137,17 @@ class RepositoryDetailsView(
     private val repository: Repository
 ) {
 
-
-    fun createView(): View {
-        val detailsView = inflater.inflate(R.layout.dialog_repository_details, null)
+    fun createView(): View = inflater.inflate(R.layout.dialog_repository_details, null).apply {
 
         Glide.with(inflater.context)
             .load(repository.author.avatarUrl)
             .placeholder(R.drawable.ic_github)
             .error(R.drawable.ic_launcher_foreground)
             .fitCenter()
-            .into(detailsView.findViewById(R.id.dialogRepositoryImage))
+            .into(this.findViewById(R.id.dialogRepositoryImage))
 
-        detailsView.findViewById<TextView>(R.id.dialogRepositoryTitle)
-            .text = repository.name
-
-        detailsView.findViewById<TextView>(R.id.dialogRepositoryAuthor)
-            .text = repository.author.username
-
-        detailsView.findViewById<TextView>(R.id.dialogRepositoryDescription)
-            .text = repository.description
-
-        return detailsView
+        this.findViewById<TextView>(R.id.dialogRepositoryTitle).text = repository.name
+        this.findViewById<TextView>(R.id.dialogRepositoryAuthor).text = repository.author.username
+        this.findViewById<TextView>(R.id.dialogRepositoryDescription).text = repository.description
     }
-
 }
