@@ -1,8 +1,8 @@
 package com.thiagoperea.deliverymuchtest.repository.internal
 
+import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import android.content.res.Configuration
 
 class InternalRepository(
     private val preferences: SharedPreferences
@@ -12,10 +12,14 @@ class InternalRepository(
         const val IS_DAY_MODE = "is.day.mode"
     }
 
-    fun doInitialSetup() {
+    fun doInitialSetup(appContext: Context): Boolean {
         if (!preferences.contains(IS_DAY_MODE)) {
-            val isDayModeOnSetup = AppCompatDelegate.getDefaultNightMode() == MODE_NIGHT_NO
+            val isDayModeOnSetup =
+                appContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO
             preferences.edit().putBoolean(IS_DAY_MODE, isDayModeOnSetup).apply()
+            return isDayModeOnSetup
+        } else {
+            return preferences.getBoolean(IS_DAY_MODE, false)
         }
     }
 

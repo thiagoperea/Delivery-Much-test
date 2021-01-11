@@ -1,6 +1,7 @@
 package com.thiagoperea.deliverymuchtest.internal
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.thiagoperea.deliverymuchtest.repository.internal.InternalRepository
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
@@ -22,6 +23,15 @@ class DeliveryMuchTestApplication : Application(), KoinComponent {
             )
         }
 
-        get<InternalRepository>().doInitialSetup()
+        val isDayMode = get<InternalRepository>().doInitialSetup(this)
+        setDayNightMode(isDayMode)
+    }
+
+    private fun setDayNightMode(isDayMode: Boolean) {
+        if (isDayMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 }

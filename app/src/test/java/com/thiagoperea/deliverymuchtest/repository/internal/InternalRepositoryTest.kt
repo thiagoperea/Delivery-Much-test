@@ -21,7 +21,7 @@ class InternalRepositoryTest {
         every { preferencesMock.edit() } returns preferencesEditorMock
 
         //act
-        repository.doInitialSetup()
+        repository.doInitialSetup(mockk(relaxed = true))
 
         //assert
         verify(exactly = 1) {
@@ -41,7 +41,7 @@ class InternalRepositoryTest {
         every { preferencesMock.edit() } returns preferencesEditorMock
 
         //act
-        repository.doInitialSetup()
+        repository.doInitialSetup(mockk(relaxed = true))
 
         //assert
         verify(exactly = 0) {
