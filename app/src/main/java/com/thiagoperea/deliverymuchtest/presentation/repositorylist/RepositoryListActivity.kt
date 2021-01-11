@@ -1,6 +1,7 @@
 package com.thiagoperea.deliverymuchtest.presentation.repositorylist
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -148,6 +149,9 @@ class RepositoryDetailsView(
 
         this.findViewById<TextView>(R.id.dialogRepositoryTitle).text = repository.name
         this.findViewById<TextView>(R.id.dialogRepositoryAuthor).text = repository.author.username
-        this.findViewById<TextView>(R.id.dialogRepositoryDescription).text = repository.description
+        this.findViewById<TextView>(R.id.dialogRepositoryDescription).apply {
+            text = repository.description
+            movementMethod = ScrollingMovementMethod()
+        }
     }
 }
