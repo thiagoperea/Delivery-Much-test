@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import junit.framework.Assert.assertFalse
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 class InternalRepositoryTest {

@@ -3,13 +3,11 @@ package com.thiagoperea.deliverymuchtest.repository.github
 import com.thiagoperea.deliverymuchtest.data.model.Repository
 import com.thiagoperea.deliverymuchtest.data.model.RepositoryAuthor
 import com.thiagoperea.deliverymuchtest.data.model.Response
-import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 class LocalGithubRepository : GithubRepository {
 
     override suspend fun doSearch(searchQuery: String): Response<List<Repository>> {
-        delay(3000)
         return if (Random.nextBoolean()) {
             Response(false, null, "Some mock exception!")
         } else {
