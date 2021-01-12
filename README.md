@@ -1,4 +1,4 @@
-# Delivery-Much-test
+# android-portfolio-2021
 
 App de buscas de repositórios do GitHub criado para avaliação das técnicas de desenvolvimento Android.
 
