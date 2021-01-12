@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.thiagoperea.deliverymuchtest">
+    package="com.thiagoperea.androidportfolio2021">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".internal.DeliveryMuchTestApplication"
+        android:name="com.thiagoperea.androidportfolio2021.internal.PortfolioApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DeliveryMuchTest">
+        android:theme="@style/Theme.Portfolio">
 
-        <activity android:name=".presentation.repositorylist.RepositoryListActivity">
+        <activity android:name="com.thiagoperea.androidportfolio2021.presentation.repositorylist.RepositoryListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.thiagoperea.deliverymuchtest"
+        applicationId "com.thiagoperea.androidportfolio2021"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
